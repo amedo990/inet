@@ -22,7 +22,8 @@
 #include "inet/common/Units.h"
 
 //TODO //FIXME KLUDGE should be 1 for internal build, and 0 for external build
-#define CHUNK_CHECK_IMPLEMENTATION_ENABLED 1
+#define CHUNK_CHECK_IMPLEMENTATION_ENABLED 0
+#define CHUNK_CHECK_USAGE_ENABLED 0
 
 // checking chunk implementation is disabled by default
 #ifndef CHUNK_CHECK_IMPLEMENTATION_ENABLED
