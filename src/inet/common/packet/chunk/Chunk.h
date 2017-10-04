@@ -17,6 +17,7 @@
 #define __INET_CHUNK_H_
 
 #include <memory>
+#include "inet/common/Ptr.h"
 #include "inet/common/MemoryInputStream.h"
 #include "inet/common/MemoryOutputStream.h"
 #include "inet/common/Units.h"
@@ -243,7 +244,14 @@ using namespace units::values;
  * e) Inserting a connecting SliceChunk into a SliceChunk merges them
  */
 // TODO: performance related; avoid iteration in SequenceChunk::getChunkLength, avoid peek for simplifying, use vector instead of deque, reverse order for frequent prepends?
-class INET_API Chunk : public cObject, public std::enable_shared_from_this<Chunk>
+class INET_API Chunk : public cObject,
+#if INET_PTR_IMPLEMENTATION == INET_STD_SHARED_PTR
+    public std::enable_shared_from_this<Chunk>
+#elif INET_PTR_IMPLEMENTATION == INET_INTRUSIVE_PTR
+    public intrusive_ref_counter<Chunk>
+#else
+#error "Unknown Ptr implementation"
+#endif
 {
   friend class SliceChunk;
   friend class SequenceChunk;
@@ -561,7 +569,7 @@ class INET_API Chunk : public cObject, public std::enable_shared_from_this<Chunk
      */
     template <typename T>
     const Ptr<T> peek(const Iterator& iterator, b length = b(-1), int flags = 0) const {
-        const auto& predicate = [] (const Ptr<Chunk>& chunk) -> bool { return chunk == nullptr || dynamicPtrCast<T>(chunk); };
+        const auto& predicate = [] (const Ptr<Chunk>& chunk) -> bool { return chunk == nullptr || dynamicPtrCast<T>(chunk) != nullptr; };
         const auto& converter = [] (const Ptr<Chunk>& chunk, const Iterator& iterator, b length, int flags) -> const Ptr<Chunk> { return chunk->peekConverted<T>(iterator, length, flags); };
         const auto& chunk = peekUnchecked(predicate, converter, iterator, length, flags);
         return checkPeekResult<T>(staticPtrCast<T>(chunk), flags);

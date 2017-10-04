@@ -31,7 +31,14 @@
 // feature defines generated based on the actual feature enablement
 #include "inet/features.h"
 
+#define INET_STD_SHARED_PTR 1
+#define INET_INTRUSIVE_PTR 2
+#define INET_PTR_IMPLEMENTATION INET_INTRUSIVE_PTR
+#if INET_PTR_IMPLEMENTATION == INET_STD_SHARED_PTR
 #include <memory>
+#elif INET_PTR_IMPLEMENTATION == INET_INTRUSIVE_PTR
+#include "inet/common/Ptr.h"
+#endif
 
 //
 // General definitions.
@@ -90,8 +97,6 @@ T *__checknull(T *p, const char *expr, const char *file, int line)
 // library is used. Thread safety requires additional synchronization primitives
 // which results in unnecessary performance penalty. In general, thread safety
 // is not a requirement for OMNeT++/INET simulations
-#define INET_STD_SHARED_PTR 1
-#define INET_PTR_IMPLEMENTATION INET_STD_SHARED_PTR
 #if INET_PTR_IMPLEMENTATION == INET_STD_SHARED_PTR
 
 template<class T>
@@ -119,6 +124,35 @@ template<class T, class U>
 Ptr<T> constPtrCast(const Ptr<U>& r)
 {
     return std::const_pointer_cast<T>(r);
+}
+
+#elif INET_PTR_IMPLEMENTATION == INET_INTRUSIVE_PTR
+
+template<class T>
+using Ptr = intrusive_ptr<T>;
+
+template<class T, typename... Args>
+Ptr<T> makeShared(Args&&... args)
+{
+    return intrusive_ptr<T>(new T(std::forward<Args>(args)...));
+}
+
+template<class T, class U>
+Ptr<T> staticPtrCast(const Ptr<U>& r)
+{
+    return static_pointer_cast<T>(r);
+}
+
+template<class T, class U>
+Ptr<T> dynamicPtrCast(const Ptr<U>& r)
+{
+    return dynamic_pointer_cast<T>(r);
+}
+
+template<class T, class U>
+Ptr<T> constPtrCast(const Ptr<U>& r)
+{
+    return const_pointer_cast<T>(r);
 }
 
 #else

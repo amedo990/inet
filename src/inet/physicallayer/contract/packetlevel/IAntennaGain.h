@@ -28,6 +28,9 @@ namespace physicallayer {
  * This interface represents the directional selectivity of an antenna.
  */
 class INET_API IAntennaGain
+#if INET_PTR_IMPLEMENTATION == INET_INTRUSIVE_PTR
+    : public intrusive_ref_counter<IAntennaGain>
+#endif
 {
   public:
     /**
