@@ -95,6 +95,7 @@ module IntegratedMultipleOsgVisualizer like IIntegratedVisualizer
         string routingTableVisualizerType = default("RoutingTableOsgVisualizer");
         string transportRouteVisualizerType = default("TransportRouteOsgVisualizer");
         string transportConnectionVisualizerType = default("TransportConnectionOsgVisualizer");
+   		*.networkNodeVisualizerModule = default(absPath(".networkNodeVisualizer[0]"));
     submodules:
         sceneVisualizer[numSceneVisualizers]: <sceneVisualizerType> like ISceneVisualizer if sceneVisualizerType != "" {
             parameters:

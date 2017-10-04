@@ -96,6 +96,7 @@ module IntegratedMultipleCanvasVisualizer like IIntegratedVisualizer
         string routingTableVisualizerType = default("RoutingTableCanvasVisualizer");
         string transportRouteVisualizerType = default("TransportRouteCanvasVisualizer");
         string transportConnectionVisualizerType = default("TransportConnectionCanvasVisualizer");
+   		*.networkNodeVisualizerModule = default(absPath(".networkNodeVisualizer[0]"));
     submodules:
         sceneVisualizer[numSceneVisualizers]: <sceneVisualizerType> like ISceneVisualizer if sceneVisualizerType != "" {
             parameters:
