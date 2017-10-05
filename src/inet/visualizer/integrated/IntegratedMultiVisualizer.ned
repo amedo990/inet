@@ -22,11 +22,11 @@ import inet.visualizer.contract.IIntegratedVisualizer;
 //
 // This module integrates canvas and osg visualizers into a single module.
 //
-module IntegratedMultipleVisualizer like IIntegratedVisualizer
+module IntegratedMultiVisualizer like IIntegratedVisualizer
 {
     parameters:
         @display("i=block/app_s");
-        string canvasVisualizerType = default("IntegratedMultipleCanvasVisualizer");
+        string canvasVisualizerType = default("IntegratedMultiCanvasVisualizer");
         string osgVisualizerType = default(""); // TODO:  revive "IntegratedOsgVisualizer" when OSG visualizers are at least as good as Canvas based
     submodules:
         canvasVisualizer: <canvasVisualizerType> like IIntegratedVisualizer if canvasVisualizerType != "" {

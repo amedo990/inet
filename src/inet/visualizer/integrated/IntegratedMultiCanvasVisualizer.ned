@@ -48,7 +48,7 @@ import inet.visualizer.contract.ITransportRouteVisualizer;
 //
 // @see ~IntegratedOsgVisualizer, ~IntegratedVisualizer, ~IIntegratedVisualizer.
 //
-module IntegratedMultipleCanvasVisualizer like IIntegratedVisualizer
+module IntegratedMultiCanvasVisualizer like IIntegratedVisualizer
 {
     parameters:
         @display("i=block/app_s");
